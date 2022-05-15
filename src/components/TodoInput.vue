@@ -1,14 +1,19 @@
 <template>
 <div class="inputContainer">
     <v-text-field
-      label="write your todo"
-      :rules="rules"
-      :todo="todo"
-      hide-details="auto"
-    >{{ todo }} </v-text-field>
-      <v-btn depressed>
-      Normal
-    </v-btn>
+      label="Write down your todo"
+      v-model="todo"
+      :value="todo"
+      @keydown.enter="addTodo(todo)"
+    />
+      <v-btn fab
+      dark
+      x-small 
+      @click="addTodo(todo)">
+        <v-icon dark >
+          mdi-plus
+        </v-icon>
+      </v-btn>
 </div>
 </template>
 
@@ -16,12 +21,18 @@
 export default {
   data() {
     return {
-      ruels:[
-        value => !!value || 'Required'
-      ],
-      todo: "test"
+      todo: ""
     }
   },
+  methods: {
+    addTodo: function(todo){
+      this.$emit('addTodo',todo)
+      this.clearInput();
+    },
+    clearInput: function(){
+      this.todo = ""
+    }
+  }
 }
 </script>
 

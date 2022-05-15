@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <!-- custom element는 하이픈으로 연결된 소문자로 표현한다 -->
-    <TodoHeader name="Todo"></TodoHeader>
-    <todo-input></todo-input>
-    <TodoList></TodoList>
+    <todo-header name="Todo"></todo-header>
+    <todo-input @addTodo="addTodo"></todo-input>
+    <todo-list :propsList="todoList" @removeTodo="removeTodo"></todo-list>
   </div>
 </template>
 
@@ -21,12 +21,37 @@ export default {
   },
   data() {
     return {
-      todos:[]
+      todoList:[]
+    }
+  },
+  created:function(){
+    // html 요소가 연결되기 전
+    if(localStorage.length>0){
+      for (let i = 0; i < localStorage.length; i++) {
+        this.todoList.push(localStorage.key(i))       
+      }
+    }
+  },
+  methods: {
+    addTodo: function(value){
+      // todo: API CRUD로 수정적용하기 
+      localStorage.setItem(value,value);
+      this.todoList.push(value)
+    },
+    removeTodo: function(todo,idx){
+      localStorage.removeItem(todo);
+      this.todoList.splice(idx,1);
     }
   },
 }
 </script>
 
-<style>
-
+<style scoped lang="scss">
+  #app {
+    // 브라우저 크기 줄여도 가운데정렬 유지
+    position: relative;
+    margin: 0 auto;
+    max-width: 500px;
+    width: 100%
+  }
 </style>
