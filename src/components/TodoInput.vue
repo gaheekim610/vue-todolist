@@ -4,12 +4,12 @@
       label="Write down your todo"
       v-model="todo"
       :value="todo"
-      @keydown.enter="addTodo(todo)"
+      @keydown.enter="addTodo(todo, false)"
     />
       <v-btn fab
       dark
       x-small 
-      @click="addTodo(todo)">
+      @click="addTodo(todo, false)">
         <v-icon dark >
           mdi-plus
         </v-icon>
@@ -25,8 +25,8 @@ export default {
     }
   },
   methods: {
-    addTodo: function(todo){
-      this.$emit('addTodo',todo)
+    addTodo: function(todo,isDone){
+      this.$emit('addTodo',todo,isDone)
       this.clearInput();
     },
     clearInput: function(){

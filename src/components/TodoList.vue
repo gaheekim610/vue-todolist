@@ -1,13 +1,13 @@
 <template>
   <div class="list">
-    <li v-for="(item,idx) in propsList" :key="item">{{ item }}
+    <li v-for="item in propsList" :key="item.id">{{ item.title }}
         <v-btn
       class="minusBtn"
       fab
       dark
       x-small
       color="primary"
-      @click="removeTodo(item,idx)"
+      @click="removeTodo(item.id)"
     >
       <v-icon dark>
         mdi-minus
@@ -21,10 +21,10 @@
   export default {
     props:["propsList"],
     methods:{
-      removeTodo(item,idx){
-        this.$emit("removeTodo",item,idx)
+      removeTodo(id){
+        this.$emit("removeTodo",id)
       }
-    }
+    },
   }
 </script>
 

@@ -11,6 +11,7 @@
 import TodoHeader from './components/TodoHeader.vue'
 import TodoInput from './components/TodoInput.vue'
 import TodoList from './components/TodoList.vue'
+import axios from 'axios'
 
 export default {
   name:'App', //todo: name을 넣어야 하는 경우는 언제인지?
@@ -24,23 +25,37 @@ export default {
       todoList:[]
     }
   },
-  created:function(){
-    // html 요소가 연결되기 전
-    if(localStorage.length>0){
-      for (let i = 0; i < localStorage.length; i++) {
-        this.todoList.push(localStorage.key(i))       
-      }
+  created: async function(){
+   try{
+     const loadRes = await axios.get('https://jsonplaceholder.typicode.com/todos');
+      if(loadRes.status!==200) throw loadRes;
+      this.todoList = loadRes.data.sort((a,b)=> b.id-a.id);
+    }catch(error){
+      // todo: 에러관련 메세지 띄우기
+      console.log('error',error);
     }
   },
   methods: {
-    addTodo: function(value){
-      // todo: API CRUD로 수정적용하기 
-      localStorage.setItem(value,value);
-      this.todoList.push(value)
+    addTodo: async function(title,completed){
+      try{
+          const addRes = await axios.post('https://jsonplaceholder.typicode.com/todos', {title,completed})
+        if(addRes.status!==201) throw addRes;
+        this.todoList=[addRes.data,...this.todoList];
+      }catch(error){
+        // todo: 에러관련 메세지 띄우기
+        console.log('error',error);
+      }
+
     },
-    removeTodo: function(todo,idx){
-      localStorage.removeItem(todo);
-      this.todoList.splice(idx,1);
+    removeTodo: async function(id){
+      try{
+        const delRes = await axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
+        if(delRes.status!==200) throw delRes;
+        this.todoList = this.todoList.filter(todo=>todo.id!==id)
+     }catch(error){
+       // todo: 에러관련 메세지 띄우기
+       console.log('error',error);
+      }
     }
   },
 }
@@ -51,7 +66,7 @@ export default {
     // 브라우저 크기 줄여도 가운데정렬 유지
     position: relative;
     margin: 0 auto;
-    max-width: 500px;
+    max-width: 600px;
     width: 100%
   }
 </style>
