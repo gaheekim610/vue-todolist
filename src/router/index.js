@@ -1,26 +1,30 @@
-// import Vue from 'vue'
-// import VueRouter from 'vue-router'
+import Vue from "vue";
+import VueRouter from "vue-router";
 
-// Vue.use(VueRouter)
+import Main from "../views/Main";
+import TodoDetail from "../views/TodoDetail";
 
-// const routes = [
-//   {
-//     path: '/',
-//     name: 'home',
-//     component: HomeView
-//   },
-//   {
-//     path: '/about',
-//     name: 'about',
-//     // route level code-splitting
-//     // this generates a separate chunk (about.[hash].js) for this route
-//     // which is lazy-loaded when the route is visited.
-//     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-//   }
-// ]
+Vue.use(VueRouter);
 
-// const router = new VueRouter({
-//   routes
-// })
+const routes = [
+  {
+    path: "/",
+    component: Main,
+  },
+  {
+    path: "/detail/:id",
+    // param이 넘어오기 때문에 path가 아닌 name으로 연결해야해서 named router로 연결
+    name: "TodoDetail",
+    component: TodoDetail,
+    // param으로 넘어온걸 prop로 사용한다는 의미. false일 경우 this.$route.params.id로 사용
+    props: true,
+  },
+];
 
-// export default router
+const router = new VueRouter({
+  // URL의 해쉬 값 제거 속성 (URL에 #해쉬 값 제거)
+  mode: "history",
+  routes,
+});
+
+export default router;

@@ -1,7 +1,9 @@
 <template>
   <div class="list">
     <li v-for="item in list" :key="item.id">
-      {{ item.title }}
+      <router-link :to="{ name: 'TodoDetail', params: { id: item.id } }">
+        {{ item.title }}
+      </router-link>
       <v-btn
         class="minusBtn"
         fab
@@ -24,11 +26,6 @@ export default {
       return this.$store.state.todoList;
     },
   },
-  // methods: {
-  //   removeTodo(id) {
-  //     this.$emit("removeTodo", id);
-  //   },
-  // },
 };
 </script>
 

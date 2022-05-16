@@ -9,12 +9,16 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     // data
+    todo: {},
     todoList: [],
   },
   mutations: {
     // methods =state를 조작하는 함수
     [Constant.SHOW_LIST]: (state, payload) => {
       state.todoList = payload.sort((a, b) => b.id - a.id);
+    },
+    [Constant.SHOW_TODO]: (state, payload) => {
+      state.todo = payload;
     },
     [Constant.ADD_TODO]: (state, payload) => {
       state.todoList = [payload, ...state.todoList];
@@ -36,11 +40,20 @@ const store = new Vuex.Store({
       const { data } = loadRes;
       return commit(Constant.SHOW_LIST, data);
     },
+    async loadTodo({ commit }, payload) {
+      const loadRes = await axios.get(
+        `https://jsonplaceholder.typicode.com/todos/${payload}`
+      );
+      if (loadRes.status !== 200) throw loadRes;
+      const { data } = loadRes;
+      return commit(Constant.SHOW_TODO, data);
+    },
     async addTodo({ commit }, payload) {
       const addRes = await axios.post(
         "https://jsonplaceholder.typicode.com/todos",
         { title: payload.todo, completed: payload.isDone }
       );
+      if (addRes.status !== 201) throw addRes;
       const { data } = addRes;
       return commit(Constant.ADD_TODO, data);
     },
