@@ -1,43 +1,38 @@
 <template>
-<div class="inputContainer">
+  <div class="inputContainer">
     <v-text-field
       label="Write down your todo"
       v-model="todo"
       :value="todo"
       @keydown.enter="addTodo(todo, false)"
     />
-      <v-btn fab
-      dark
-      x-small 
-      @click="addTodo(todo, false)">
-        <v-icon dark >
-          mdi-plus
-        </v-icon>
-      </v-btn>
-</div>
+    <v-btn fab dark x-small @click="addTodo(todo, false)">
+      <v-icon dark> mdi-plus </v-icon>
+    </v-btn>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      todo: ""
-    }
+      todo: "",
+    };
   },
   methods: {
-    addTodo: function(todo,isDone){
-      this.$emit('addTodo',todo,isDone)
+    addTodo: function (todo, isDone) {
+      this.$store.dispatch("addTodo", { todo, isDone });
       this.clearInput();
     },
-    clearInput: function(){
-      this.todo = ""
-    }
-  }
-}
+    clearInput: function () {
+      this.todo = "";
+    },
+  },
+};
 </script>
 
 <style scoped>
-  .inputContainer {
-    display: flex;
-  }
+.inputContainer {
+  display: flex;
+}
 </style>
